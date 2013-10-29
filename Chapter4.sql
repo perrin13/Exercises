@@ -95,9 +95,20 @@ WHERE custid IN(
 	)
 );
 
---8: Queries Sales.Orders and Sales.OrderDetails to calculate the running-total quantity for 
+--8: Queries Sales.CustOrders to calculate the running-total quantity for 
 --	each customer and month.
 USE TSQL2012;
+
+SELECT C1.custid, C1.ordermonth, C1.qty, 
+	(
+	 SELECT SUM(qty)
+	 FROM Sales.CustOrders AS C2
+	 WHERE C1.custid = C2.custid AND
+		C2.ordermonth <= C1.ordermonth
+	) AS runqty
+FROM Sales.Custorders AS C1
+ORDER BY C1.custid, C1.ordermonth;
+	  
 
 
 
